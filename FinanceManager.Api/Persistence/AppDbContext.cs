@@ -1,4 +1,5 @@
 ﻿using EntityFramework.Exceptions.PostgreSQL;
+using FinanceManager.Api.Entities;
 using FinanceManager.Api.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -11,6 +12,10 @@ public class AppDbContext : DbContext
     {
     }
 
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Category> Categories => Set<Category>();
+    public DbSet<Item> Items => Set<Item>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
@@ -22,7 +27,7 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-        
+
         foreach (var entityType in modelBuilder.Model.GetEntityTypes().ToList())
         {
             var hasAutoIncrEntity = Array.Find(entityType.ClrType.GetInterfaces(),
